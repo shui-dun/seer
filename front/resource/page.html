@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
+    <title></title>
+    <link href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        <div class="page-header">
+            <h2>赛尔号
+                <small>精灵图鉴</small>
+            </h2>
+        </div>
+        <div class="container" style="width: 100%;">
+            <div class="row">
+                <a class="btn btn-default col-xs-4" id="type1">初级形态</a>
+                <a class="btn btn-default col-xs-4" id="type2">中级形态</a>
+                <a class="btn btn-default col-xs-4" id="type3">高级形态</a>
+            </div>
+        </div>
+        <br />
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row" style="display: flex;flex-direction: row;">
+                    <div class="col-xs-6" style="display: flex;justify-content: center;align-items: center;">
+                        <img id="pet-img" width="50%">
+                    </div>
+                    <div class="col-xs-6">
+                        <table class="table">
+                            <thead>
+                                <th>精灵信息</th>
+                                <th></th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>名称</td>
+                                    <td id="name-td"></td>
+                                </tr>
+                                <tr>
+                                    <td>序号</td>
+                                    <td id="id-td"></td>
+                                </tr>
+                                <tr>
+                                    <td>性别</td>
+                                    <td id="sex-td"></td>
+                                </tr>
+                                <tr>
+                                    <td>属性</td>
+                                    <td id="race-td"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-body" id="info-panel">
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-body" style="text-align: center">
+                <img id="group-img" style="width: 50%;">
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table class="table" style="text-align: left;">
+                    <thead>
+                        <th>种族值</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>总和</th>
+                        <th id="sum-td"></th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>体力</td>
+                            <td id="ti-li-td"></td>
+                            <td>攻击</td>
+                            <td id="gong-ji-td"></td>
+                            <td>防御</td>
+                            <td id="fang-yu-td"></td>
+                        </tr>
+                        <tr>
+                            <td>特攻</td>
+                            <td id="te-gong-td"></td>
+                            <td>特防</td>
+                            <td id="te-fang-td"></td>
+                            <td>速度</td>
+                            <td id="su-du-td"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-body" style="text-align: center">
+                <table class="table table-striped" style="text-align: left;">
+                    <thead>
+                        <th>技能名</th>
+                        <th>技能类型</th>
+                        <th>伤害值</th>
+                        <th>使用次数</th>
+                        <th>获得等级</th>
+                        <th>技能描述</th>
+                    </thead>
+                    <tbody id="ji-neng-table">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <br />
+        <div class="panel panel-default">
+            <div class="panel-head">
+                <div class="container" style="width: 100%;">
+                    <div class="row">
+                        <button id="pu-gong-button" class="btn btn-default col-xs-3">物理攻击</button>
+                        <button id="te-gong-button" class="btn btn-default col-xs-3">特殊攻击</button>
+                        <button id="shu-xing-button" class="btn btn-default col-xs-3">属性攻击</button>
+                        <button id="fang-yu-button" class="btn btn-default col-xs-3">受到伤害</button>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body" style="text-align: center">
+                <video id="pet-video" name="media" width="100%" controls="controls">
+                    <source id="video-source" type="video/mp4">
+                </video>
+            </div>
+        </div>
+    </div>
+    <script>
+        var id;
+        var n_type;
+        var type = 3;
+        var offset = 0;
+
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]); return null;
+        }
+
+        function updtae_resource() {
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/seer/info",
+                data: { "id": id, "type": type },
+                contentType: 'application/x-www-form-urlencoded;charset=UTF-8',
+                success: function (result) {
+                    n_type = result[0]['n_type'];
+                    var new_id = Number(id) + Number(offset);
+                    $("#pet-img").attr("src", "pet/" + new_id + ".gif");
+                    $("#id-td").text(new_id);
+                    $("#group-img").attr("src", "group/" + new_id + ".gif");
+                    $("#video-source").attr("src", "pu-gong/" + new_id + ".mp4");
+                    $("#pet-video").load();
+                    $("#name-td").text(result[0]['name']);
+                    $("#sex-td").text(result[0]['sex']);
+                    $("#race-td").text(result[0]['race']);
+                    $("#info-panel").text(result[0]['info']);
+                    $("#sum-td").text(result[0]['sum']);
+                    $("#ti-li-td").text(result[0]['ti_li']);
+                    $("#gong-ji-td").text(result[0]['gong_ji']);
+                    $("#fang-yu-td").text(result[0]['fang_yu']);
+                    $("#te-gong-td").text(result[0]['te_gong']);
+                    $("#te-fang-td").text(result[0]['te_fang']);
+                    $("#su-du-td").text(result[0]['su_du']);
+                },
+                error: function () {
+                    alert("异常！请稍后刷新页面");
+                }
+            });
+        }
+
+        function update_ji_neng() {
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/seer/ji-neng",
+                data: { "id": id },
+                contentType: 'application/x-www-form-urlencoded;charset=UTF-8',
+                success: function (result) {
+                    for (var i in result) {
+                        $("#ji-neng-table").append("<tr><td>" + result[i]['name'] + "</td><td>" + result[i]['type'] + "</td><td>" + result[i]['power'] + "</td><td>" + result[i]['times'] + "</td><td>" + result[i]['grade'] + "</td><td>" + result[i]['info'] + "</td></tr>");
+                    }
+                },
+                error: function () {
+                    alert("异常！请稍后刷新页面");
+                }
+            });
+        }
+
+        $("#pu-gong-button").click(function () {
+            var new_id = Number(id) + Number(offset);
+            $("#video-source").attr("src", "pu-gong/" + new_id + ".mp4");
+            $("#pet-video").load();
+        });
+
+        $("#te-gong-button").click(function () {
+            var new_id = Number(id) + Number(offset);
+            $("#video-source").attr("src", "te-gong/" + new_id + ".mp4");
+            $("#pet-video").load();
+        });
+
+        $("#shu-xing-button").click(function () {
+            var new_id = Number(id) + Number(offset);
+            $("#video-source").attr("src", "shu-xing/" + new_id + ".mp4");
+            $("#pet-video").load();
+        });
+
+        $("#fang-yu-button").click(function () {
+            var new_id = Number(id) + Number(offset);
+            $("#video-source").attr("src", "fang-yu/" + new_id + ".mp4");
+            $("#pet-video").load();
+        });
+
+        $("#type1").click(function () {
+            type = 1;
+            if (n_type == 3) {
+                offset = -2;
+                updtae_resource();
+            } else if (n_type == 2) {
+                offset = -1;
+                updtae_resource();
+            } else {
+                alert("该精灵不存在初级形态");
+            }
+
+        });
+
+        $("#type2").click(function () {
+            type = 2;
+            if (n_type == 3) {
+                offset = -1;
+                updtae_resource();
+            } else {
+                alert("该精灵不存在中级形态");
+            }
+
+        });
+
+        $("#type3").click(function () {
+            type = 3;
+            offset = 0;
+            updtae_resource();
+        });
+
+        function getCookie(name) {
+            var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return unescape(arr[2]);
+            else
+                return null;
+        }
+
+        function setCookie(name, value) {
+            var Days = 100;
+            var exp = new Date();
+            exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+            document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
+        }
+
+        function update_history() {
+            history_id = getCookie("history-id");
+            if (history_id) {
+                var array = history_id.split("-");
+                var index = array.indexOf(id);
+                if (index != -1) {
+                    array.splice(index, 1);
+                } else if (array.length > 100) {
+                    array.shift();
+                }
+                array.push(id);
+                setCookie("history-id", array.join("-"));
+            } else {
+                setCookie("history-id", id);
+            }
+        }
+
+        $(function () {
+            id = getUrlParam("id");
+            if (!(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent))) {
+                $('#root').css({ "margin": "auto", "width": "65%" });
+            }
+            updtae_resource();
+            update_ji_neng();
+            update_history();
+        });
+    </script>
+</body>
+
+</html>

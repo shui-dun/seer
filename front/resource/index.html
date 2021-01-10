@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
+    <title>赛尔号精灵图鉴</title>
+    <link href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        <div class="page-header">
+            <h2>赛尔号
+                <small>
+                    精灵图鉴
+                </small>
+            </h2>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form class="form-horizontal" id="form-find" role="form">
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-2 control-label">精灵名称</label>
+                        <div class="col-xs-9 col-sm-10">
+                            <input type="text" class="form-control" name="name" placeholder="初/中/高级形态名称均可">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-2 control-label">精灵序号</label>
+                        <div class="col-xs-4 col-sm-5">
+                            <input type="text" class="form-control" name="idmin" placeholder="序号下界" />
+                        </div>
+                        <div class="col-xs-5 col-sm-5">
+                            <input type="text" class="form-control" name="idmax" placeholder="序号上界" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-2 control-label">精灵性别</label>
+                        <div class="col-xs-9 col-sm-10">
+                            <select class="form-control" name="sex">
+                                <option value="任意">任意</option>
+                                <option value="雄性">雄性</option>
+                                <option value="雌性">雌性</option>
+                                <option value="无性别">无性别</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-2 control-label">精灵种族</label>
+                        <div class="col-xs-9 col-sm-10">
+                            <input type="text" class="form-control" name="race" placeholder="例：火系/火" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-2 control-label">精灵信息</label>
+                        <div class="col-xs-9 col-sm-10">
+                            <input type="text" class="form-control" name="info" placeholder="该精灵的特征？" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-2 control-label">种族值总和</label>
+                        <div class="col-xs-4 col-sm-5">
+                            <input type="text" class="form-control" name="sum-min" placeholder="下界" />
+                        </div>
+                        <div class="col-xs-5 col-sm-5">
+                            <input type="text" class="form-control" name="sum-max" placeholder="上界" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-3 col-sm-2 control-label">技能名称</label>
+                        <div class="col-xs-9 col-sm-10">
+                            <input type="text" class="form-control" name="ji-neng" placeholder="忘记精灵名了？还记得它有什么技能吗？" />
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn btn-default" type="reset" style="width: 49%;float: left;">重置</button>
+                        <button class="btn btn-default" id="button-find" type="button"
+                            style="width: 49%;float: right;">查找</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="search-panel" class="panel panel-default" style="display: none;">
+            <div class="panel-heading">
+                查找结果
+            </div>
+            <div class="panel-body" id="search-result">
+            </div>
+            <div class="row" style="display: flex;flex-direction: row;">
+                <div class="col-xs-6">
+                    <button id="left" class="btn btn-default" style="width: 100%; height: 100%;"
+                        type="button">上一页</button>
+                </div>
+                <div class="col-xs-6">
+                    <button id="right" class="btn btn-default" style="width: 100%; height: 100%;"
+                        type="button">下一页</button>
+                </div>
+            </div>
+        </div>
+        <div style="text-align: center;">
+            <img id="nono_img" width="30%">
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <audio src="bgm.mp3" controls="controls" style="width: 100%;"></audio>
+                <br /><br />
+                <div class="row" style="display: flex;flex-direction: row;">
+                    <div class="col-xs-6">
+                        <button id="random" class="btn btn-default" style="width: 100%; height: 100%;"
+                            type="button">随便看看</button>
+                    </div>
+                    <div class="col-xs-6">
+                        <button id="history" class="btn btn-default" style="width: 100%; height: 100%;"
+                            type="button">历史记录</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var page = 0;
+
+        var n_per_page = 12;
+
+        var results;
+
+        $("#nono_img").click(change_nono);
+
+        function change_nono() {
+            var nu = Math.round(Math.random() * 24 + 1);
+            $('#nono_img').attr("src", "nono/" + nu + ".gif");
+        }
+
+        function jing_ling_table() {
+            var cols = 6;
+            if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+                cols = 3;
+            }
+            var row = null;
+            $("#search-result").empty();
+            var start = n_per_page * page;
+            var end = n_per_page * (page + 1);
+            if (end > results.length) {
+                end = results.length;
+            }
+            var new_array = results.slice(start, end);
+            for (var i in new_array) {
+                if (i % cols == 0) {
+                    row = $('<div class="row"></div>');
+                    $("#search-result").append(row);
+                }
+                row.append('<div class="col-sm-2 col-xs-4"> <a target="_blank" href="/page.html?id=' + new_array[i]['id'] + '"> <img class="img-rounded" src="head/' + new_array[i]['id'] + '.jpg" width="100%"> <p style="text-align: center; ">' + new_array[i]['name3'] + '</p> </a> </div>');
+            }
+            $("#search-panel").css({ "display": "" });
+        }
+
+        $("#button-find").click(function () {
+            page = 0;
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/seer/find",
+                data: $('#form-find').serializeArray(),
+                contentType: 'application/x-www-form-urlencoded;charset=UTF-8',
+                success: function (result) {
+                    results = result;
+                    jing_ling_table();
+                },
+                error: function () {
+                    alert("异常！请稍后再试");
+                }
+            });
+        });
+
+        $("#random").click(function () {
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/seer/getid",
+                success: function (result) {
+                    window.open("/page.html?id=" + result[Math.round(Math.random() * (result.length - 1))]['id']);
+                },
+                error: function () {
+                    alert("异常！请稍后再试");
+                }
+            });
+        });
+
+        $("#left").click(function () {
+            if (page > 0) {
+                page -= 1;
+                jing_ling_table();
+            }
+        });
+
+        $("#right").click(function () {
+            if (page < n_pages()) {
+                page += 1;
+                jing_ling_table();
+            }
+        });
+
+        $("#history").click(function () {
+            page = 0;
+            $.ajax({
+                type: "POST",
+                contentType: 'application/x-www-form-urlencoded;charset=UTF-8',
+                dataType: "json",
+                url: "/seer/history",
+                success: function (result) {
+                    results = result;
+                    jing_ling_table();
+                },
+                error: function () {
+                    alert("异常！请稍后再试");
+                }
+            });
+        })
+
+        function n_pages() {
+            var len = results.length;
+            if (results.length != 0) {
+                return Math.floor((len - 1) / n_per_page);
+            } else {
+                return 0;
+            }
+        }
+
+        $(function () {
+            if (!(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent))) {
+                $('#root').css({ "margin": "auto", "width": "65%" });
+            }
+            change_nono();
+        });
+    </script>
+</body>
+
+</html>
