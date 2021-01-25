@@ -18,6 +18,7 @@
 --
 -- Table structure for table `jing_ling`
 --
+use seer;
 
 DROP TABLE IF EXISTS `jing_ling`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;

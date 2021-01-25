@@ -2,6 +2,6 @@
 *.jpg
 *.gif
 *.iml
-back/.idea
-back/out
-back/web
+*.properties
+seer/.idea
+seer/target

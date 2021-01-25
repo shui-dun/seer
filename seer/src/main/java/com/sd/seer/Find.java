@@ -1,4 +1,4 @@
-package hxk;
+package com.sd.seer;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

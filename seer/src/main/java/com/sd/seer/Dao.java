@@ -1,21 +1,29 @@
-package hxk;
+package com.sd.seer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
+import java.util.Properties;
 
 public class Dao {
-    private static String driver = "com.mysql.jdbc.Driver";
-    private static String url = "jdbc:mysql://127.0.0.1:3306/seer?useUnicode=true&characterEncoding=UTF-8&useSSL=true&verifyServerCertificate=false";
-    private static String user = "hxk";
-    private static String password = "xxx";
+    private static String driver = "com.mysql.cj.jdbc.Driver";
+    private static String url;
+    private static String user;
+    private static String password;
 
     static {
-        try {
+        try (InputStream in = Dao.class.getResourceAsStream("/db.properties")) {
             Class.forName(driver);
-        } catch (ClassNotFoundException e) {
+            Properties properties = new Properties();
+            properties.load(in);
+            url = properties.getProperty("url");
+            user = properties.getProperty("user");
+            password = properties.getProperty("password");
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
