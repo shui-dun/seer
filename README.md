@@ -2,7 +2,10 @@
 
 赛尔号精灵图鉴网站
 
-* index.html
-![](img/1.png)
-* page.html
-![](img/2.png)
+## index.html
+
+![](.README/1.png)
+
+## page.html
+
+![](.README/2.png)

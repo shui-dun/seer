@@ -1,7 +1,4 @@
-*.mp4
-*.jpg
-*.gif
 *.iml
 *.properties
-seer/.idea
-seer/target
+.idea/
+target/
