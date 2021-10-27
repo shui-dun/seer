@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
+    <title>赛尔号精灵图鉴</title>
+    <!-- 新 Bootstrap4 核心 CSS 文件  -->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <!-- bootstrap.bundle.min.js 用于弹窗、提示、下拉菜单，包含了 popper.min.js -->
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div id="head"></div>
+
+    <div class="container">
+        <form>
+            <div class="form-group">
+                <label for="inputName">精灵名称</label>
+                <input type="text" class="form-control" id="inputName" placeholder="初/中/高级形态名称均可">
+            </div>
+            <div class="collapse" id="collapseSearch">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="idRangeLower">序号下界</label>
+                        <output>1</output>
+                        <input type="range" class="custom-range" min="1" max="865" id="idRangeLower" value="1"
+                            oninput="this.previousElementSibling.value = this.value">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="idRangeUpper">序号上界</label>
+                        <output>865</output>
+                        <input type="range" class="custom-range" min="1" max="865" id="idRangeUpper" value="865"
+                            oninput="this.previousElementSibling.value = this.value">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputGender">性别</label>
+                        <select id="inputGender" class="form-control">
+                            <option selected>任意</option>
+                            <option>雄性</option>
+                            <option>雌性</option>
+                            <option>无性别</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputRace">种族</label>
+                        <select id="inputRace" class="form-control">
+                            <option selected>任意</option>
+                            <option>火系</option>
+                            <option>水系</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="idRaceValueLower">种族值下界</label>
+                        <output>1</output>
+                        <input type="range" class="custom-range" min="1" max="800" id="idRaceValueLower" value="1"
+                            oninput="this.previousElementSibling.value = this.value">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="idRaceValueUpper">种族值上界</label>
+                        <output>800</output>
+                        <input type="range" class="custom-range" min="1" max="800" id="idRaceValueUpper" value="800"
+                            oninput="this.previousElementSibling.value = this.value">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputJineng">技能</label>
+                    <input type="text" class="form-control" id="inputJineng" placeholder="忘记精灵名了？还记得它有什么技能吗？">
+                </div>
+            </div>
+            <button class="btn btn-dark" type="reset">重置</button>
+            <button type="submit" class="btn btn-primary">查询</button>
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseSearch"
+                aria-expanded="false" aria-controls="collapseSearch">
+                高级搜索
+            </button>
+        </form>
+    </div>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-xl-2 col-lg-4 col-md-6 col-6 mb-4">
+                <div class="bg-white rounded shadow-sm"><img src="/head/3.jpg" alt="" class="img-fluid card-img-top">
+                    <div class="p-4">
+                        <h5> <a href="#" class="text-dark">布布花</a></h5>
+                        <p class="small text-muted mb-0">精灵介绍xxx</p>
+                        <div
+                            class="d-flex align-items-center justify-content-between rounded-pill bg-light px-1 py-2 mt-4">
+                            <p class="small mb-0"><span class="font-weight-bold">3</span></p>
+                            <div class="badge badge-danger px-3 rounded-pill font-weight-normal">查看详情</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6 py-5 text-left"><a href="#" class="btn btn-dark px-5 py-3 text-uppercase">回到顶部</a></div>
+            <div class="col-6 py-5 text-right"><a href="#" class="btn btn-dark px-5 py-3 text-uppercase">查看更多</a></div>
+        </div>
+    </div>
+
+    <div id="footer"></div>
+
+    <script>
+        $("#head").load("head.html");
+        $("#footer").load("footer.html");
+    </script>
+</body>
+
+</html>
