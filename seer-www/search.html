@@ -22,8 +22,8 @@
     <div class="container">
         <form>
             <div class="form-group">
-                <label for="inputName">精灵名称</label>
-                <input type="text" class="form-control" id="inputName" placeholder="初/中/高级形态名称均可">
+                <label for="name">精灵名称</label>
+                <input type="text" class="form-control" id="name" placeholder="初/中/高级形态名称均可">
             </div>
             <div class="collapse" id="collapseSearch">
                 <div class="form-row">
@@ -42,8 +42,8 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label for="inputGender">性别</label>
-                        <select id="inputGender" class="form-control">
+                        <label for="gender">性别</label>
+                        <select id="gender" class="form-control">
                             <option selected>任意</option>
                             <option>雄性</option>
                             <option>雌性</option>
@@ -51,31 +51,45 @@
                         </select>
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="inputRace">种族</label>
-                        <select id="inputRace" class="form-control">
+                        <label for="race">种族</label>
+                        <select id="race" class="form-control">
                             <option selected>任意</option>
-                            <option>火系</option>
-                            <option>水系</option>
+                            <option>草</option>
+                            <option>水</option>
+                            <option>火</option>
+                            <option>飞行</option>
+                            <option>电</option>
+                            <option>冰</option>
+                            <option>地</option>
+                            <option>机械</option>
+                            <option>超能</option>
+                            <option>普通</option>
+                            <option>战斗</option>
+                            <option>暗影</option>
+                            <option>龙</option>
+                            <option>光</option>
+                            <option>圣灵</option>
+                            <option>神秘</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label for="idRaceValueLower">种族值下界</label>
+                        <label for="raceValueLower">种族值下界</label>
                         <output>1</output>
-                        <input type="range" class="custom-range" min="1" max="800" id="idRaceValueLower" value="1"
+                        <input type="range" class="custom-range" min="1" max="800" id="raceValueLower" value="1"
                             oninput="this.previousElementSibling.value = this.value">
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="idRaceValueUpper">种族值上界</label>
+                        <label for="raceValueUpper">种族值上界</label>
                         <output>800</output>
-                        <input type="range" class="custom-range" min="1" max="800" id="idRaceValueUpper" value="800"
+                        <input type="range" class="custom-range" min="1" max="800" id="raceValueUpper" value="800"
                             oninput="this.previousElementSibling.value = this.value">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="inputJineng">技能</label>
-                    <input type="text" class="form-control" id="inputJineng" placeholder="忘记精灵名了？还记得它有什么技能吗？">
+                    <label for="move">技能</label>
+                    <input type="text" class="form-control" id="move" placeholder="忘记精灵名了？还记得它有什么技能吗？">
                 </div>
             </div>
             <button class="btn btn-dark" type="reset">重置</button>
