@@ -4,6 +4,7 @@ import com.sd.seerserver.entity.Response;
 import com.sd.seerserver.entity.User;
 import com.sd.seerserver.enumeration.StatusCodeEnum;
 import com.sd.seerserver.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -21,6 +22,8 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 @Slf4j
 @RestController
@@ -71,7 +74,7 @@ public class UserController {
         return new Response<>(StatusCodeEnum.SUCCESS);
     }
 
-
+    @ApiOperation("根据用户名删除用户")
     @RequiresPermissions("user:delete")
     @GetMapping("/delete/{name}")
     public Response<?> delete(@PathVariable String name) {
@@ -87,12 +90,14 @@ public class UserController {
         }
     }
 
+    @ApiOperation("列出所有用户的信息")
     @RequiresPermissions("user:list")
     @GetMapping("/list")
-    public Response<?> list() {
+    public Response<Set<User>> list() {
         return new Response<>(StatusCodeEnum.SUCCESS, userService.listAll());
     }
 
+    @ApiOperation("测试当前用户是否是登陆状态")
     @RequiresAuthentication
     @GetMapping("/isLogin")
     public Response<?> isLogin() {

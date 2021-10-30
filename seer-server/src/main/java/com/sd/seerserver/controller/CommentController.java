@@ -1,9 +1,11 @@
 package com.sd.seerserver.controller;
 
+import com.sd.seerserver.entity.Comment;
 import com.sd.seerserver.entity.Response;
 import com.sd.seerserver.entity.User;
 import com.sd.seerserver.enumeration.StatusCodeEnum;
 import com.sd.seerserver.service.CommentService;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.UnauthorizedException;
@@ -14,6 +16,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/comment")
@@ -21,12 +24,14 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
+    @ApiOperation("列出所有的评论")
     @RequiresPermissions("comment:list")
     @GetMapping("/list")
-    public Response<?> list() {
+    public Response<Set<Comment>> list() {
         return new Response<>(StatusCodeEnum.SUCCESS, commentService.listAll());
     }
 
+    @ApiOperation("通过ID删除评论")
     @RequiresPermissions("comment:delete")
     @GetMapping("/delete/{id}")
     public Response<?> delete(@PathVariable long id) {
@@ -37,18 +42,21 @@ public class CommentController {
         }
     }
 
+    @ApiOperation("列出我的评论")
     @RequiresAuthentication
     @PostMapping("/mine")
-    public Response<?> mine(int limit, @ApiParam("返回结果中最小的可能id") int minId) {
+    public Response<Set<Comment>> mine(int limit, @ApiParam("通过minId分页，相比使用offset，大大提升性能") int minId) {
         String name = ((User) SecurityUtils.getSubject().getPrincipal()).getName();
         return new Response<>(StatusCodeEnum.SUCCESS, commentService.listMine(name, limit, minId));
     }
 
+    @ApiOperation("列出关于某精灵的评论")
     @GetMapping("/pet")
-    public Response<?> pet(int petId, int limit, int minId) {
+    public Response<Set<Comment>> pet(int petId, int limit, int minId) {
         return new Response<>(StatusCodeEnum.SUCCESS, commentService.listByPet(petId, limit, minId));
     }
 
+    @ApiOperation("添加一条评论")
     @RequiresAuthentication
     @PostMapping("/addMine")
     public Response<?> addMine(int petId, String text) {
@@ -65,6 +73,7 @@ public class CommentController {
         }
     }
 
+    @ApiOperation("根据ID删除我的某条评论")
     @RequiresAuthentication
     @PostMapping("/deleteMine")
     public Response<?> deleteMine(long id) {
