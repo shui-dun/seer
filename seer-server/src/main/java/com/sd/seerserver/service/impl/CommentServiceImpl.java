@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -26,13 +27,13 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Set<Comment> listMine(String name, int limit, int minId) {
-        return commentMapper.listMine(name, limit, minId);
+    public List<Comment> listMine(String name, int limit, int offset) {
+        return commentMapper.listMine(name, limit, offset);
     }
 
     @Override
-    public Set<Comment> listByPet(int petId, int limit, int minId) {
-        return commentMapper.listByPet(petId, limit, minId);
+    public List<Comment> listByPet(int petId, int limit, int offset) {
+        return commentMapper.listByPet(petId, limit, offset);
     }
 
     @Override

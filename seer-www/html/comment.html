@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>赛尔号精灵图鉴</title>
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/css/common.css">
+    <script src="/js/common.js"></script>
+    <style>
+        #noMoreCommentDiv,
+        #commentIdText {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="content">
+        <div id="head"></div>
+
+        <div class="container">
+            <!-- 评论区 -->
+            <div id="commentDiv"></div>
+
+            <div class="text-center">
+                <!-- 无更多评论提示 -->
+                <div id="noMoreCommentDiv" class="my-5">无更多评论</div>
+
+                <!-- 回到顶部/更多评论按钮区 -->
+                <div class="row mb-5">
+                    <div class="col-6"><a href="#" class="btn btn-light w-100">回到顶部</a></div>
+                    <div class="col-6"><a href="javascript:searchComment();" class="btn btn-light w-100">更多评论</a></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <template id="commentTemplate">
+        <div class="card my-4">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-5">
+                        <h5 id="commentPetname"></h5>
+                    </div>
+                    <div class="col-5 text-right">
+                        <span id="commentTimeSpan"></span>
+                    </div>
+                    <div onclick="deleteComment(this);" class="col-1">
+                        <text id="commentIdText"></text>
+                        <svg t="1635331279718" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                            xmlns="http://www.w3.org/2000/svg" p-id="2436" width="20" height="20">
+                            <path
+                                d="M640 64a64 64 0 0 1 64 64v85.333333h226.133333c4.693333 0 8.533333 3.84 8.533334 8.533334v46.933333a8.533333 8.533333 0 0 1-8.533334 8.533333H874.666667v554.666667a128 128 0 0 1-128 128H277.333333a128 128 0 0 1-128-128V277.333333H93.866667a8.533333 8.533333 0 0 1-8.533334-8.533333v-46.933333c0-4.693333 3.84-8.533333 8.533334-8.533334H320V128a64 64 0 0 1 64-64h256z m170.666667 213.333333H213.333333v554.666667a64 64 0 0 0 60.245334 63.893333L277.333333 896h469.333334a64 64 0 0 0 63.893333-60.245333L810.666667 832V277.333333z m-392.533334 128c4.693333 0 8.533333 3.84 8.533334 8.533334v324.266666a8.533333 8.533333 0 0 1-8.533334 8.533334h-46.933333a8.533333 8.533333 0 0 1-8.533333-8.533334V413.866667c0-4.693333 3.84-8.533333 8.533333-8.533334h46.933333z m234.666667 0c4.693333 0 8.533333 3.84 8.533333 8.533334v324.266666a8.533333 8.533333 0 0 1-8.533333 8.533334h-46.933333a8.533333 8.533333 0 0 1-8.533334-8.533334V413.866667c0-4.693333 3.84-8.533333 8.533334-8.533334h46.933333zM640 128H384v85.333333h256V128z"
+                                fill="#333333" p-id="2437"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="commentContentDiv"> </div>
+        </div>
+    </template>
+
+    <div id="footer"></div>
+    <div id="model"></div>
+
+    <script>
+        // 偏移量，用于分页
+        var commentOffset = 0;
+
+        // 一次访问获取的评论数目，用于分页
+        var commentLimit;
+
+        // 根据设备尺寸不同，设置不同的limit
+        if (/Android|iPhone/i.test(navigator.userAgent)) {
+            commentLimit = 4;
+        } else {
+            commentLimit = 8;
+        }
+
+        searchComment();
+
+        // 获取评论
+        function searchComment() {
+            let urlParms = new URLSearchParams({
+                "limit": commentLimit,
+                "offset": commentOffset
+            });
+            fetch('/s/comment/mine?' + urlParms).then(response => response.json())
+                .then(data => {
+                    if (data['code'] == 0) {
+                        if (data['data'].length < commentLimit) {
+                            document.getElementById("noMoreCommentDiv").style.display = "block";
+                        }
+                        commentOffset += data['data'].length;
+                        let commentDiv = document.getElementById("commentDiv");
+                        let template = document.getElementById("commentTemplate");
+                        for (let i in data['data']) {
+                            let comment = data['data'][i];
+                            template.content.getElementById("commentPetname").innerHTML = '@' + comment['petName'];
+                            template.content.getElementById("commentTimeSpan").innerHTML = new Date(comment['time']).toLocaleDateString();
+                            template.content.getElementById("commentContentDiv").innerHTML = comment['content'];
+                            template.content.getElementById("commentIdText").innerHTML = comment['id'];
+                            let clone = document.importNode(template.content, true);
+                            commentDiv.appendChild(clone);
+                        }
+                    } else {
+                        showModel(data['msg']);
+                    }
+                });
+        }
+
+        // 删除评论
+        function deleteComment(div) {
+            let id = div.getElementsByTagName('text')[0].innerHTML;
+            let urlParms = new URLSearchParams({ "id": id });
+            fetch('/s/comment/deleteMine', {
+                method: "post",
+                body: urlParms
+            }).then(response => response.json())
+                .then(data => {
+                    if (data['code'] == 0) {
+                        div.parentNode.parentNode.parentNode.remove();
+                    }
+                    showModel(data['msg']);
+                });
+        }
+    </script>
+</body>
+
+</html>

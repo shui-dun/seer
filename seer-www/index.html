@@ -3,31 +3,36 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
+    <meta name="viewport" content="width=device-width" />
     <title>赛尔号精灵图鉴</title>
     <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/css/common.css">
+    <script src="/js/common.js"></script>
+    <style>
+        .jumbotron {
+            margin-top: 100px;
+            opacity: 90%;
+        }
+    </style>
 </head>
 
 <body background="/resource/wallpaper.jpg" style="background-size: cover;">
-    <div id="head"></div>
-    <div class="container" style="opacity: 90%;">
-        <div class="jumbotron">
-            <h1 class="display-4 mb-5">赛尔号图鉴</h1>
-            <p class="lead">该网站收集了从布布种子到托鲁克的所有精灵（序号从1到865）的图片以及战斗动作等资源</p>
-            <hr class="my-4">
-            <p>想要了解更多，请访问<a href="https://github.com/shui-dun/seer">项目主页</a></p>
-            <a class="btn btn-primary btn-lg" href="/random.html" role="button">随便看看</a>
+    <div class="content">
+        <div id="head"></div>
+        <div class="container">
+            <div class="jumbotron">
+                <h1 class="display-4 mb-5">赛尔号图鉴</h1>
+                <p class="lead">该网站收集了从布布种子到托鲁克的所有精灵（序号从1到865）的图片以及战斗动作等资源</p>
+                <hr class="my-4">
+                <p>该项目由<a href="https://github.com/shui-dun/seer">GitHub</a>托管</p>
+                <a class="btn btn-primary btn-lg" href="/html/random.html" role="button">随便看看</a>
+            </div>
         </div>
     </div>
     <div id="footer"></div>
-    <script>
-        $("#head").load("head.html");
-        $("#footer").load("footer.html");
-    </script>
 </body>
 
 </html>

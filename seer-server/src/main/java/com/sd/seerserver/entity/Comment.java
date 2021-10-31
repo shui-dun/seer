@@ -18,7 +18,7 @@ public class Comment {
   @ApiModelProperty("评论编写者")
   private String user;
 
-  @ApiModelProperty("对哪个精灵ID做出的评论")
+  @ApiModelProperty("评论的精灵ID")
   private Long pet;
 
   @ApiModelProperty("发表评论时的时间戳")
@@ -26,5 +26,8 @@ public class Comment {
 
   @ApiModelProperty("评论内容")
   private String content;
+
+  @ApiModelProperty("评论的精灵名称")
+  private String petName;
 
 }

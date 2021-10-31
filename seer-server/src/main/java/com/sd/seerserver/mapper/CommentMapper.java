@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Set;
 
 @Mapper
@@ -20,11 +21,11 @@ public interface CommentMapper {
     @Delete("delete from comment where id=#{id}")
     int deleteById(long id);
 
-    @Select("select * from comment where user=#{name} and id >= #{minId} order by id desc limit #{limit}")
-    Set<Comment> listMine(String name, int limit, int minId);
+    @Select("select c.*, p.name3 as pet_name from comment c join pet p on (c.pet = p.id) where user=#{name} order by id desc limit #{limit} offset #{offset}")
+    List<Comment> listMine(String name, int limit, int offset);
 
-    @Select("select * from comment where pet=#{petId} and id >= #{minId} order by id desc limit #{limit}")
-    Set<Comment> listByPet(int petId, int limit, int minId);
+    @Select("select * from comment where pet=#{petId} order by id desc limit #{limit} offset #{offset}")
+    List<Comment> listByPet(int petId, int limit, int offset);
 
     @Insert("insert into comment(user, pet, time, content) values (#{name}, #{petId}, #{timestamp}, #{text})")
     void addMine(String name, int petId, String text, Timestamp timestamp);

@@ -3,6 +3,7 @@ package com.sd.seerserver.service;
 import com.sd.seerserver.entity.Comment;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Set;
 
 public interface CommentService {
@@ -10,9 +11,9 @@ public interface CommentService {
 
     int deleteById(long id);
 
-    Set<Comment> listMine(String name, int limit, int minId);
+    List<Comment> listMine(String name, int limit, int offset);
 
-    Set<Comment> listByPet(int petId, int limit, int minId);
+    List<Comment> listByPet(int petId, int limit, int offset);
 
     void addMine(String name, int petId, String text, Timestamp timestamp);
 

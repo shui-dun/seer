@@ -1,0 +1,85 @@
+<style>
+    #noMorePetDiv {
+        display: none;
+    }
+</style>
+
+<!-- 精灵搜索结果的卡片集 -->
+<div class="container mt-5">
+    <!-- 搜索结果显示区域 -->
+    <div class="row" id="searchResultDiv">
+
+    </div>
+
+    <!-- 无更多精灵的提示 -->
+    <div id="noMorePetDiv" class="my-5 text-center">无更多精灵</div>
+    <div class="row">
+        <div class="col-6 py-5 text-left"><a href="#" class="btn btn-dark px-5 py-3 text-uppercase">回到顶部</a>
+        </div>
+        <div class="col-6 py-5 text-right"><button onclick="morePet(document.getElementById('searchForm'));"
+                class="btn btn-dark px-5 py-3 text-uppercase">查看更多</button></div>
+    </div>
+</div>
+
+<!-- 搜索结果中精灵卡片模板 -->
+<template id="searchResultTemplate">
+    <div class="col-xl-2 col-lg-4 col-md-6 col-6 mb-4">
+        <div class="bg-white rounded shadow-sm"><img id="headImg" alt="" class="img-fluid card-img-top">
+            <div class="p-4">
+                <h5> <a target="_blank" id="nameA" class="text-dark"></a></h5>
+                <a target="_blank" id="infoP" class="small text-muted mb-0"></a>
+                <div class="d-flex align-items-center justify-content-between rounded-pill bg-light px-1 py-2 mt-4">
+                    <p class="small mb-0"><span id="idSpan" class="font-weight-bold"></span></p>
+                    <a target="_blank" id="detailedA"
+                        class="badge badge-danger px-3 rounded-pill font-weight-normal">查看详情</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    // 搜索的偏移量，用于分页
+    var searchOffset = 0;
+
+    // 一次搜索的数目，用于分页
+    var searchLimit;
+
+    // 根据设备尺寸不同，设置不同的limit
+    if (/Android|iPhone/i.test(navigator.userAgent)) {
+        searchLimit = 8;
+    } else {
+        searchLimit = 18;
+    }
+
+    function renderPetCards(data) {
+        if (data['code'] == 0) {
+            if (data['data'].length < searchLimit) {
+                document.getElementById("noMorePetDiv").style.display = "block";
+            }
+            let searchResultDiv = document.getElementById("searchResultDiv");
+            let template = document.getElementById("searchResultTemplate");
+            for (let ind in data['data']) {
+                let petInfo = data['data'][ind];
+                let info = petInfo['info3'];
+                let maxlength = 30;
+                if (info.length > maxlength) {
+                    info = info.substr(0, maxlength - 2) + "……";
+                }
+                let infoPage = "/html/info.html?id=" + petInfo['id'];
+                template.content.getElementById("headImg").setAttribute("src", "/resource/head/" + petInfo['id'] + ".jpg");
+                template.content.getElementById("nameA").setAttribute("href", infoPage);
+                template.content.getElementById("nameA").innerHTML = petInfo['name3'];
+                template.content.getElementById("infoP").innerHTML = info;
+                template.content.getElementById("infoP").setAttribute("href", infoPage)
+                template.content.getElementById("idSpan").innerHTML = petInfo['id'];
+                template.content.getElementById("detailedA").setAttribute("href", infoPage);
+                let clone = document.importNode(template.content, true);
+                searchResultDiv.appendChild(clone);
+            }
+        } else {
+            showModel(data['msg']);
+        }
+
+    }
+</script>

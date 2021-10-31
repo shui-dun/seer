@@ -7,6 +7,7 @@ import com.sd.seerserver.enumeration.StatusCodeEnum;
 import com.sd.seerserver.service.CommentService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
@@ -16,8 +17,10 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Set;
 
+@Slf4j
 @RestController
 @RequestMapping("/comment")
 public class CommentController {
@@ -44,16 +47,16 @@ public class CommentController {
 
     @ApiOperation("列出我的评论")
     @RequiresAuthentication
-    @PostMapping("/mine")
-    public Response<Set<Comment>> mine(int limit, @ApiParam("通过minId分页，相比使用offset，大大提升性能") int minId) {
+    @GetMapping("/mine")
+    public Response<List<Comment>> mine(int limit, int offset) {
         String name = ((User) SecurityUtils.getSubject().getPrincipal()).getName();
-        return new Response<>(StatusCodeEnum.SUCCESS, commentService.listMine(name, limit, minId));
+        return new Response<>(StatusCodeEnum.SUCCESS, commentService.listMine(name, limit, offset));
     }
 
     @ApiOperation("列出关于某精灵的评论")
     @GetMapping("/pet")
-    public Response<Set<Comment>> pet(int petId, int limit, int minId) {
-        return new Response<>(StatusCodeEnum.SUCCESS, commentService.listByPet(petId, limit, minId));
+    public Response<List<Comment>> pet(int petId, int limit, int offset) {
+        return new Response<>(StatusCodeEnum.SUCCESS, commentService.listByPet(petId, limit, offset));
     }
 
     @ApiOperation("添加一条评论")

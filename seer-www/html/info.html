@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>赛尔号精灵图鉴</title>
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/css/common.css">
+    <script src="/js/common.js"></script>
+    <style>
+        #type1Li,
+        #type2Li,
+        #noMoreCommentDiv {
+            display: none;
+        }
+
+        .carousel-item img {
+            height: 200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="content">
+        <div id="head"></div>
+        <div class="container">
+
+            <!-- 形态导航栏 -->
+            <ul class="nav nav-pills">
+                <li id="type1Li" class="nav-item">
+                    <a id="type1A" class="nav-link">初级形态</a>
+                </li>
+                <li id="type2Li" class="nav-item">
+                    <a id="type2A" class="nav-link">中级形态</a>
+                </li>
+                <li id="type3Li" class="nav-item">
+                    <a id="type3A" class="nav-link active">高级形态</a>
+                </li>
+            </ul>
+            <div class="card my-5">
+                <div class="row no-gutters">
+                    <div class="col-md-6 p-3 ">
+                        <!-- 轮播图片 -->
+                        <div id="carouselExampleIndicators" class="carousel slide" data-interval="3000"
+                            data-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img id="petImg" class="d-block" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img id="groupImg" class="d-block" alt="...">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 精灵名称+属性+ID+性别 -->
+                        <div class="row mt-3 p-md-5">
+                            <div class="col-md-6">
+                                <h3 id="petNameH3"></h3>
+                            </div>
+                            <div class="col-md-6">
+                                <h4>
+                                    <span id="raceSpan" class="badge badge-secondary"></span>
+                                    <span id="idSpan" class="badge badge-secondary"></span>
+                                    <span id="sexSpan" class="badge badge-secondary"></span>
+                                </h4>
+                            </div>
+                        </div>
+
+                        <!-- 精灵介绍 -->
+                        <div id="profileDiv" class="row mx-md-4 mx-2 my-md-0 my-3"></div>
+                    </div>
+
+                    <!-- 精灵种族值表格 -->
+                    <div class="col-md-6">
+                        <div class="card-body">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td>体力</td>
+                                        <td>
+                                            <input id="tiLi-input" type="range" class="form-control-range" disabled
+                                                min="0" max="150" />
+                                        </td>
+                                        <td id="tiLi-td"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>攻击</td>
+                                        <td>
+                                            <input id="gongJi-input" type="range" class="form-control-range" disabled
+                                                min="0" max="125" />
+                                        </td>
+                                        <td id="gongJi-td"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>防御</td>
+                                        <td>
+                                            <input id="fangYu-input" type="range" class="form-control-range" disabled
+                                                min="0" max="120" />
+                                        </td>
+                                        <td id="fangYu-td"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>特攻</td>
+                                        <td>
+                                            <input id="teGong-input" type="range" class="form-control-range" disabled
+                                                min="0" max="120" />
+                                        </td>
+                                        <td id="teGong-td"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>特防</td>
+                                        <td>
+                                            <input id="teFang-input" type="range" class="form-control-range" disabled
+                                                min="0" max="120" />
+                                        </td>
+                                        <td id="teFang-td"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>速度</td>
+                                        <td>
+                                            <input id="suDu-input" type="range" class="form-control-range" disabled
+                                                min="0" max="115" />
+                                        </td>
+                                        <td id="suDu-td"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>总和</td>
+                                        <td>
+                                            <input id="sum-input" type="range" class="form-control-range" disabled
+                                                min="0" max="660" />
+                                        </td>
+                                        <td id="sum-td"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 技能表 -->
+            <div class="collapse" id="collapse-move">
+                <table class="table table-striped">
+                    <thead class="thead-dark">
+                        <th>技能名</th>
+                        <th>技能类型</th>
+                        <th>伤害值</th>
+                        <th>使用次数</th>
+                        <th>获得等级</th>
+                        <th>技能描述</th>
+                    </thead>
+
+                    <tbody id="move-table"></tbody>
+                </table>
+            </div>
+
+            <!-- 展开/折叠技能表按钮 -->
+            <button class="btn btn-light w-100 mb-3" type="button" data-toggle="collapse" data-target="#collapse-move"
+                aria-expanded="false" aria-controls="collapse-move">
+                展开/折叠技能表
+            </button>
+
+            <!-- 精灵战斗视频导航栏 -->
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="wuGong-tab" data-toggle="tab" href="#wuGong" role="tab"
+                        aria-controls="wuGong" aria-selected="true">物攻</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="teGong-tab" data-toggle="tab" href="#teGong" role="tab"
+                        aria-controls="teGong" aria-selected="false">特攻</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="shuXing-tab" data-toggle="tab" href="#shuXing" role="tab"
+                        aria-controls="shuXing" aria-selected="false">属性</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="fangYu-tab" data-toggle="tab" href="#fangYu" role="tab"
+                        aria-controls="fangYu" aria-selected="false">防御</a>
+                </li>
+            </ul>
+
+            <!-- 精灵战斗视频内容 -->
+            <div class="tab-content">
+                <div class="tab-pane active" id="wuGong" role="tabpanel" aria-labelledby="wuGong-tab">
+                    <video id="video-pu-gong" name="media" width="100%" controls="controls">
+                        <source id="video-source-pu-gong" type="video/mp4">
+                    </video>
+                </div>
+                <div class="tab-pane" id="teGong" role="tabpanel" aria-labelledby="teGong-tab">
+                    <video id="video-te-gong" name="media" width="100%" controls="controls">
+                        <source id="video-source-te-gong" type="video/mp4">
+                    </video>
+                </div>
+                <div class="tab-pane" id="shuXing" role="tabpanel" aria-labelledby="shuXing-tab">
+                    <video id="video-shu-xing" name="media" width="100%" controls="controls">
+                        <source id="video-source-shu-xing" type="video/mp4">
+                    </video>
+                </div>
+                <div class="tab-pane" id="fangYu" role="tabpanel" aria-labelledby="fangYu-tab">
+                    <video id="video-fang-yu" name="media" width="100%" controls="controls">
+                        <source id="video-source-fang-yu" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </div>
+
+        <!-- 评论区 -->
+        <div id="commentDiv" class="container">
+
+            <!-- 编写评论的表单 -->
+            <form id="commentForm" onsubmit="return postComment();">
+                <div class="input-group my-5 ">
+                    <textarea name="text" maxlength="100" required minlength="4" id="commentText"
+                        class="form-control custom-control" rows="3" placeholder="发表评论（需要登陆）"></textarea>
+                    <button type="submit" class="input-group-addon btn btn-light">
+                        <svg t="1635329303681" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                            xmlns="http://www.w3.org/2000/svg" p-id="2408" width="30" height="30">
+                            <path
+                                d="M931.4 498.9L94.9 79.5c-3.4-1.7-7.3-2.1-11-1.2-8.5 2.1-13.8 10.7-11.7 19.3l86.2 352.2c1.3 5.3 5.2 9.6 10.4 11.3l147.7 50.7-147.6 50.7c-5.2 1.8-9.1 6-10.3 11.3L72.2 926.5c-0.9 3.7-0.5 7.6 1.2 10.9 3.9 7.9 13.5 11.1 21.5 7.2l836.5-417c3.1-1.5 5.6-4.1 7.2-7.1 3.9-8 0.7-17.6-7.2-21.6zM170.8 826.3l50.3-205.6 295.2-101.3c2.3-0.8 4.2-2.6 5-5 1.4-4.2-0.8-8.7-5-10.2L221.1 403 171 198.2l628 314.9-628.2 313.2z"
+                                p-id="2409"></path>
+                        </svg>
+                    </button>
+                </div>
+            </form>
+
+            <!-- 评论列表 -->
+
+        </div>
+
+        <div class="container text-center">
+            <div id="noMoreCommentDiv" class="my-5">无更多评论</div>
+
+            <!-- 回到顶部/更多评论按钮区 -->
+            <div class="row mb-5">
+                <div class="col-6"><a href="#" class="btn btn-light w-100">回到顶部</a></div>
+                <div class="col-6"><a href="javascript:searchComment();" class="btn btn-light w-100">更多评论</a></div>
+            </div>
+        </div>
+
+        <!-- 评论列表表项的模板 -->
+        <template id="commentTemplate">
+            <div class="card my-4">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-6">
+                            <h5 id="commentUsername"></h5>
+                        </div>
+                        <div class="col-6 text-right">
+                            <span id="commentTimeSpan"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body" id="commentContentDiv">
+                </div>
+            </div>
+        </template>
+    </div>
+
+    <div id="footer"></div>
+    <div id="model"></div>
+
+    <script>
+
+        // 从URL中获取参数
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]); return null;
+        }
+
+        // 该精灵高级形态的ID
+        var id = getUrlParam("id");
+
+        // 更新访问历史记录
+        updateHistory();
+
+        // 关于该精灵的所有信息存储在这里
+        var info;
+
+        // 获取精灵信息
+        fetch('/s/pet/info?id=' + id).then(response => response.json())
+            .then(data => {
+                if (data['code'] == 0) {
+                    info = data['data'];
+                    changeType(id);
+                    mixin();
+                    searchComment();
+                } else {
+                    showModel(data['msg']);
+                }
+            });
+
+        // 初始化，填充共有数据
+        function mixin() {
+            // 根据精灵形态个数隐藏形态导航tab
+            if (info['ntype'] == 2) {
+                document.getElementById("type1Li").style.display = "inline";
+            } else if (info['ntype'] == 3) {
+                document.getElementById("type1Li").style.display = "inline";
+                document.getElementById("type2Li").style.display = "inline";
+            }
+            // 填充种族信息和性别信息
+            document.getElementById("raceSpan").innerHTML = info['race'];
+            document.getElementById("sexSpan").innerHTML = info['sex'];
+            // 填充种族值信息
+            let lst = ['fangYu', 'gongJi', 'suDu', 'sum', 'teFang', 'teGong', 'tiLi'];
+            for (let i in lst) {
+                document.getElementById(lst[i] + "-input").value = info[lst[i]];
+                document.getElementById(lst[i] + "-td").innerHTML = info[lst[i]];
+            }
+            // 填充技能表
+            let moveTable = document.getElementById("move-table");
+            for (let i in info['moves']) {
+                let move = info['moves'][i];
+                let tr = document.createElement("tr");
+                tr.appendChild(document.createElement("td"));
+                tr.lastChild.innerHTML = move['name'];
+                tr.appendChild(document.createElement("td"));
+                tr.lastChild.innerHTML = move['type'];
+                tr.appendChild(document.createElement("td"));
+                tr.lastChild.innerHTML = move['power'];
+                tr.appendChild(document.createElement("td"));
+                tr.lastChild.innerHTML = move['times'];
+                tr.appendChild(document.createElement("td"));
+                tr.lastChild.innerHTML = move['grade'];
+                tr.appendChild(document.createElement("td"));
+                tr.lastChild.innerHTML = move['info'];
+                moveTable.appendChild(tr);
+            }
+        }
+
+        // 切换精灵形态时更新界面，即精灵各形态的不同私有数据
+        function changeType(num) {
+            // 更换精灵图片
+            document.getElementById("petImg").setAttribute("src", "/resource/pet/" + num + ".gif");
+            document.getElementById("groupImg").setAttribute("src", "/resource/group/" + num + ".gif");
+            // 更换精灵动作视频
+            document.getElementById("video-source-pu-gong").setAttribute("src", "/resource/pu-gong/" + num + ".mp4");
+            document.getElementById("video-source-te-gong").setAttribute("src", "/resource/te-gong/" + num + ".mp4");
+            document.getElementById("video-source-shu-xing").setAttribute("src", "/resource/shu-xing/" + num + ".mp4");
+            document.getElementById("video-source-fang-yu").setAttribute("src", "/resource/fang-yu/" + num + ".mp4");
+            // 加载视频
+            document.getElementById("video-pu-gong").load();
+            document.getElementById("video-te-gong").load();
+            document.getElementById("video-shu-xing").load();
+            document.getElementById("video-fang-yu").load();
+            // 更新名称和简介信息
+            if (num == id) {
+                var name = info["name3"];
+                var profile = info["info3"];
+            } else if (info['ntype'] == 3 && id - num == 1) {
+                var name = info["name2"];
+                var profile = info["info2"];
+            } else {
+                var name = info["name1"];
+                var profile = info["info1"];
+            }
+            document.getElementById("petNameH3").innerHTML = name;
+            document.getElementById("idSpan").innerHTML = num.toString();
+            document.getElementById("profileDiv").innerHTML = profile;
+        }
+
+        // 监听“初级形态”按钮
+        document.getElementById("type1A").addEventListener("click", function () {
+            document.getElementById("type1A").setAttribute("class", "nav-link active");
+            document.getElementById("type2A").setAttribute("class", "nav-link");
+            document.getElementById("type3A").setAttribute("class", "nav-link");
+            if (info['ntype'] == 2) {
+                changeType(id - 1);
+            } else if (info['ntype'] == 3) {
+                changeType(id - 2);
+            }
+        });
+
+        // 监听“中级形态”按钮
+        document.getElementById("type2A").addEventListener("click", function () {
+            document.getElementById("type1A").setAttribute("class", "nav-link");
+            document.getElementById("type2A").setAttribute("class", "nav-link active");
+            document.getElementById("type3A").setAttribute("class", "nav-link");
+            changeType(id - 1);
+        });
+
+        // 监听“高级形态”按钮
+        document.getElementById("type3A").addEventListener("click", function () {
+            document.getElementById("type1A").setAttribute("class", "nav-link");
+            document.getElementById("type2A").setAttribute("class", "nav-link");
+            document.getElementById("type3A").setAttribute("class", "nav-link active");
+            changeType(id);
+        });
+
+        // 偏移量，用于分页
+        var commentOffset = 0;
+
+        // 一次访问获取的评论数目，用于分页
+        var commentLimit;
+
+        // 根据设备尺寸不同，设置不同的limit
+        if (/Android|iPhone/i.test(navigator.userAgent)) {
+            commentLimit = 4;
+        } else {
+            commentLimit = 8;
+        }
+
+        // 获取评论
+        function searchComment() {
+            let urlParms = new URLSearchParams({
+                "petId": id,
+                "limit": commentLimit,
+                "offset": commentOffset
+            });
+            fetch('/s/comment/pet?' + urlParms).then(response => response.json())
+                .then(data => {
+                    if (data['code'] == 0) {
+                        if (data['data'].length < commentLimit) {
+                            document.getElementById("noMoreCommentDiv").style.display = "block";
+                        }
+                        commentOffset += data['data'].length;
+                        let commentDiv = document.getElementById("commentDiv");
+                        let template = document.getElementById("commentTemplate");
+                        for (let i in data['data']) {
+                            let comment = data['data'][i];
+                            template.content.getElementById("commentUsername").innerHTML = '@' + comment['user'];
+                            template.content.getElementById("commentTimeSpan").innerHTML = new Date(comment['time']).toLocaleDateString();
+                            template.content.getElementById("commentContentDiv").innerHTML = comment['content'];
+                            let clone = document.importNode(template.content, true);
+                            commentDiv.appendChild(clone);
+                        }
+                    } else {
+                        showModel(data['msg']);
+                    }
+                });
+        }
+
+        // 提交评论
+        function postComment() {
+            let commentForm = document.getElementById("commentForm");
+            let formData = new FormData(commentForm);
+            formData.append("petId", id);
+            fetch('/s/comment/addMine', {
+                method: "post",
+                body: formData
+            }).then(response => response.json())
+                .then(data => {
+                    if (data['code'] == 4) {
+                        window.location.href = '/html/login.html';
+                    } else {
+                        showModel(data['msg']);
+                    }
+                });
+            return false;
+        }
+
+        // 更新localStorage中的精灵访问历史记录
+        function updateHistory() {
+            let array = JSON.parse('[' + window.localStorage.getItem("petHistory") + ']');
+            if (array[0] == null) {
+                array = [];
+            }
+            array.unshift(parseInt(id));
+            let set = new Set(array);
+            array = Array.from(set);
+            let maxlength = 200;
+            if (array.length > maxlength) {
+                array.pop();
+            }
+            window.localStorage.setItem("petHistory", array);
+        }
+
+    </script>
+</body>
+
+</html>

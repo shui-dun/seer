@@ -58,6 +58,9 @@ public class UserController {
         User user = new User(username, newPasswd, salt);
         try {
             userService.signup(user);
+            Subject subject = SecurityUtils.getSubject();
+            AuthenticationToken token = new UsernamePasswordToken(username, passwd);
+            subject.login(token);
         } catch (DataIntegrityViolationException e) {
             return new Response<>(StatusCodeEnum.USER_ALREADY_EXIST);
         }
@@ -101,6 +104,7 @@ public class UserController {
     @RequiresAuthentication
     @GetMapping("/isLogin")
     public Response<?> isLogin() {
-        return new Response<>(StatusCodeEnum.SUCCESS);
+        String name = ((User) SecurityUtils.getSubject().getPrincipal()).getName();
+        return new Response<>(StatusCodeEnum.SUCCESS, name);
     }
 }

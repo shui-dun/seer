@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>赛尔号精灵图鉴</title>
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/css/common.css">
+    <script src="/js/common.js"></script>
+    <style>
+        #wallpaper2Img {
+            display: none;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <div id="head"></div>
+
+        <div class="container-fluid">
+            <div class="row text-center align-items-center">
+                <!-- 左侧图片 -->
+                <div class="col-lg-6">
+                    <img id="wallpaper2Img" src="/resource/wallpaper2.jpg">
+                </div>
+                <div class="col-lg-6 px-md-5  py-5">
+
+                    <!-- “登录您的账号”标题 -->
+                    <h3 class="mb-5">
+                        <svg t="1635317342515" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                            xmlns="http://www.w3.org/2000/svg" p-id="2432" width="80" height="80">
+                            <path
+                                d="M283.733333 177.066667h426.666667c14.933333 0 27.733333 8.533333 40.533333 23.466666s17.066667 32 17.066667 49.066667v531.2l-398.933333 66.133333v-539.733333l341.333333-70.4h-398.933333v569.6h-57.6v-582.4c0-8.533333 2.133333-17.066667 8.533333-27.733333s14.933333-19.2 21.333333-19.2z m142.933334 384v57.6l57.6-10.666667v-57.6l-57.6 10.666667z"
+                                p-id="2433"></path>
+                        </svg>
+                        登录您的账号
+                    </h3>
+
+                    <!-- 登陆表单 -->
+                    <form id="loginForm" onsubmit="return submitForm();">
+                        <div class="form-group">
+                            <label class="sr-only" for="inputUsername">Username</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">@</div>
+                                </div>
+                                <input type="text" required name="username" class="form-control" id="inputUsername"
+                                    placeholder="请输入用户名">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only" for="inputPassword">Password</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">Password</div>
+                                </div>
+                                <input type="password" name="passwd" class="form-control" id="inputPassword"
+                                    placeholder="请输入密码" required>
+                            </div>
+                        </div>
+                        <a href="/html/signup.html" class="btn btn-light mt-5 w-100">没有账号？前去注册</a>
+                        <button id="loginButton" type="submit" class="btn btn-primary mt-3 w-100">登陆</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer"></div>
+    <div id="model"></div>
+
+    <script>
+
+        // 手机用户不显示左侧图片
+        if (!(/Android|iPhone/i.test(navigator.userAgent))) {
+            document.getElementById("wallpaper2Img").style.display = "block";
+        }
+
+        // 提交登陆表单
+        function submitForm() {
+            let form = document.getElementById("loginForm");
+            let urlParms = new URLSearchParams(new FormData(form));
+            fetch('/s/user/login', {
+                method: "post",
+                body: urlParms
+            }).then(response => response.json())
+                .then(data => {
+                    if (data['code'] == 0) {
+                        window.location.href = "/";
+                    } else {
+                        showModel(data['msg']);
+                    }
+                });
+            return false;
+        }
+
+    </script>
+</body>
+
+</html>

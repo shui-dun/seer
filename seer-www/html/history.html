@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>赛尔号精灵图鉴</title>
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/css/common.css">
+    <script src="/js/common.js"></script>
+</head>
+
+<body>
+    <div class="content">
+        <div id="head"></div>
+        <div id="petCards"></div>
+    </div>
+    <div id="footer"></div>
+    <div id="model"></div>
+
+    <script>
+        $("#petCards").load('/html/petCards.html', function () {
+            morePet();
+        });
+
+        // 进行搜索
+        function morePet() {
+            let array = JSON.parse('[' + window.localStorage.getItem("petHistory") + ']');
+            if (array[0] == null) {
+                return;
+            }
+            let urlParms = new URLSearchParams();
+            for (let ind = 0; ind < searchLimit; ind++) {
+                if (!array[ind + searchOffset]) {
+                    break;
+                }
+                urlParms.append("ids", array[ind + searchOffset]);
+            }
+            fetch('/s/pet/baseInfos?' + urlParms).then(response => response.json())
+                .then(data => {
+                    if (data['code'] == 0 && data['data'].length != 0) {
+                        searchOffset += data['data'].length;
+                    }
+                    renderPetCards(data);
+                });
+        }
+    </script>
+</body>
+
+</html>

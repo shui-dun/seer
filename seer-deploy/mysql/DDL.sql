@@ -21,18 +21,14 @@ create table role_perm
 (
     role char(25),
     perm char(40),
-    primary key (role, perm),
-    foreign key (role) references role (name),
-    foreign key (perm) references perm (name)
+    primary key (role, perm)
 );
 
 create table user_role
 (
     user char(20),
     role char(25),
-    primary key (user, role),
-    foreign key (user) references user (name),
-    foreign key (role) references role (name)
+    primary key (user, role)
 );
 
 create table comment
@@ -41,9 +37,7 @@ create table comment
     user    char(20),
     pet     smallint,
     time    timestamp,
-    content varchar(350),
-    foreign key (user) references user (name),
-    foreign key (pet) references pet (id)
+    content varchar(350)
 );
 
 insert into role (name)

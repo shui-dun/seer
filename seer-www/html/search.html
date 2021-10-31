@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>赛尔号精灵图鉴</title>
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/css/common.css">
+    <script src="/js/common.js"></script>
+</head>
+
+<body>
+    <div class="content">
+        <div id="head"></div>
+
+        <div class="container">
+            <!-- 搜索表单 -->
+            <form id="searchForm" onsubmit="return submitSearch(this);">
+                <div class="form-group">
+                    <label for="name">精灵名称</label>
+                    <input name="name" type="text" class="form-control" id="name" placeholder="初/中/高级形态名称均可">
+                </div>
+                <!-- 隐藏的表单，点击高级搜索才会显示 -->
+                <div class="collapse" id="collapseSearch">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="idRangeLower">序号下界</label>
+                            <output>1</output>
+                            <input name="idRangeLower" type="range" class="custom-range" min="1" max="865"
+                                id="idRangeLower" value="1" oninput="this.previousElementSibling.value = this.value">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="idRangeUpper">序号上界</label>
+                            <output>865</output>
+                            <input name="idRangeUpper" type="range" class="custom-range" min="1" max="865"
+                                id="idRangeUpper" value="865" oninput="this.previousElementSibling.value = this.value">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="gender">性别</label>
+                            <select name="sex" id="gender" class="form-control">
+                                <option selected>任意</option>
+                                <option>雄性</option>
+                                <option>雌性</option>
+                                <option>无性别</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="race">种族</label>
+                            <select name="race" id="race" class="form-control">
+                                <option selected>任意</option>
+                                <option>草</option>
+                                <option>水</option>
+                                <option>火</option>
+                                <option>飞行</option>
+                                <option>电</option>
+                                <option>冰</option>
+                                <option>地</option>
+                                <option>机械</option>
+                                <option>超能</option>
+                                <option>普通</option>
+                                <option>战斗</option>
+                                <option>暗影</option>
+                                <option>龙</option>
+                                <option>光</option>
+                                <option>圣灵</option>
+                                <option>神秘</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="raceValueLower">种族值下界</label>
+                            <output>450</output>
+                            <input name="raceValueLower" type="range" class="custom-range" min="450" max="660"
+                                id="raceValueLower" value="450"
+                                oninput="this.previousElementSibling.value = this.value">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="raceValueUpper">种族值上界</label>
+                            <output>660</output>
+                            <input name="raceValueUpper" type="range" class="custom-range" min="450" max="660"
+                                id="raceValueUpper" value="660"
+                                oninput="this.previousElementSibling.value = this.value">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="move">技能</label>
+                        <input name="move" type="text" class="form-control" id="move" placeholder="忘记精灵名了？还记得它有什么技能吗？">
+                    </div>
+                </div>
+                <button class="btn btn-dark" type="reset">重置</button>
+                <button type="submit" class="btn btn-primary">查询</button>
+                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseSearch"
+                    aria-expanded="false" aria-controls="collapseSearch">
+                    高级搜索
+                </button>
+            </form>
+        </div>
+
+        <div id="petCards"></div>
+
+    </div>
+
+    <div id="footer"></div>
+    <div id="model"></div>
+
+    <script>
+        $("#petCards").load('/html/petCards.html');
+
+        // 清空之前的搜索，然后进行新的搜索
+        function submitSearch(form) {
+            // 重置offset
+            searchOffset = 1;
+            // 清除“无更多精灵”信息
+            document.getElementById("noMorePetDiv").style.display = "none";
+            // 清除精灵信息
+            document.getElementById("searchResultDiv").innerHTML = "";
+            // 获取精灵信息
+            morePet(form);
+            return false;
+        }
+
+        // 进行搜索
+        function morePet(form) {
+            let formData = new FormData(form);
+            formData.set("idRangeLower", Math.max(searchOffset, formData.get("idRangeLower")));
+            formData.append("limit", searchLimit);
+            let urlParms = new URLSearchParams(formData);
+            fetch('/s/pet/search?' + urlParms).then(response => response.json())
+                .then(data => {
+                    if (data['code'] == 0 && data['data'].length != 0) {
+                        searchOffset = parseInt(data['data'][data['data'].length - 1]['id']) + 1;
+                    }
+                    renderPetCards(data);
+                });
+        }
+
+    </script>
+</body>
+
+</html>

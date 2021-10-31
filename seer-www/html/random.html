@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+
+<head>
+    <script>
+        // 随机获取一个精灵ID进行访问
+        fetch('/s/pet/randomId').then(response => response.json())
+            .then(data => {
+                if (data['code'] == 0) {
+                    window.location.href = "/html/info.html?id=" + data['data'];
+                } else {
+                    alert(data['msg']);
+                }
+            });
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
