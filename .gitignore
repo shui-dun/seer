@@ -1,3 +1,6 @@
 *.iml
 .idea/
 target/
+
+docker-compose.yml
+application.prod.yml

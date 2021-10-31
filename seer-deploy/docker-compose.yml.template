@@ -5,16 +5,16 @@ services:
     container_name: seernginx
     restart: unless-stopped
     ports:
-      - "80:80"
+      - "83:80"
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ../seer-www/:/srv/http
-  tomcat:
-    image: tomcat:9.0-jdk8-openjdk
-    container_name: seertomcat
+  springboot:
+    build: ./seer-server
+    container_name: seerspringboot
     restart: unless-stopped
     volumes:
-      - ../seer-server/target/seer.war:/usr/local/tomcat/webapps/seer.war
+      - springboot/log.log:/seer-server/log.log
   mysql:
     image: mysql:8.0.23
     container_name: seermysql
@@ -25,5 +25,5 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: seer
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: admin
+      # MYSQL_USER: admin
+      # MYSQL_PASSWORD: admin
