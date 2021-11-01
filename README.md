@@ -45,4 +45,4 @@
 
 ### 精灵信息
 
-![info](C:/Users/26046/Desktop/info.png)
+![info](.README/info.png)
