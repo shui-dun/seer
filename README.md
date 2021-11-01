@@ -29,6 +29,15 @@
 * shiro（权限控制）
 * swagger（接口文档与测试）
 
+## 管理员
+
+拥有admin role的用户拥有额外的权限，但这些功能没有提供GUI
+
+* 删除用户：`GET /s/user/delete/{name}`
+* 列出所有用户：`GET /s/user/list`
+* 删除评论：`GET /s/comment/delete/{id}`
+* 列出所有评论：`GET /s/comment/list`
+
 ## 截图
 
 ### 主页
@@ -46,3 +55,4 @@
 ### 精灵信息
 
 ![info](.README/info.png)
+
