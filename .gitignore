@@ -1,7 +1,4 @@
-*.iml
-.idea/
-target/
-
 docker-compose.yml
 application.yml
 *.log
+seer-deploy/mysql/data/
