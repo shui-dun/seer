@@ -4,8 +4,11 @@
 
 ## 如何部署
 
-* git clone
-* docker compose
+* `apt install git-lfs && git lfs install`
+* `git clone https://github.com/shui-dun/seer`
+* 根据`application.template.yml`编写`application.yml`
+* 根据`docker-compose.template.yml`编写`docker-compose.yml`
+* `docker compose up -d`
 
 ## 测试网站
 

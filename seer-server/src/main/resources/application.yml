@@ -1,8 +1,0 @@
-server:
-  port: 9090
-  servlet:
-    context-path: /s
-
-mybatis:
-  configuration:
-    map-underscore-to-camel-case: true

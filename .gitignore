@@ -3,4 +3,5 @@
 target/
 
 docker-compose.yml
-application.prod.yml
+application.yml
+*.log
