@@ -10,10 +10,6 @@
 * 根据`docker-compose.template.yml`编写`docker-compose.yml`
 * `docker compose up -d`
 
-## 测试网站
-
-http://testen.top:83
-
 ## 功能
 
 * 搜索精灵
@@ -33,3 +29,20 @@ http://testen.top:83
 * shiro（权限控制）
 * swagger（接口文档与测试）
 
+## 截图
+
+### 主页
+
+![home](.README/home.jpeg)
+
+### 注册界面
+
+![signup](.README/signup.jpeg)
+
+### 搜索精灵
+
+![search](.README/search.png)
+
+### 精灵信息
+
+![info](C:/Users/26046/Desktop/info.png)
