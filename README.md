@@ -11,6 +11,10 @@
 * `mvn clean package`生成`target/seer-server.jar`
 * `docker-compose up -d`
 
+## 测试网站
+
+http://testen.top:83/
+
 ## 功能
 
 * 搜索精灵
